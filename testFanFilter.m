@@ -5,13 +5,14 @@ clc; clear;
 %% Parameters
 %imagePath = 'C:\Users\papastone\repos\orientationanalysis\human1.tif';
 %imagePath = 'C:\Users\csl\Dropbox\OSL\NEBEC\Images\human1.tif';
-imagePath = 'C:\Users\slimj_000\Dropbox\OSL\NEBEC\Images\human1.tif';
+[filename, directory] = uigetfile(fullfile(pwd, '*.*'))
+imagePath = fullfile(directory, filename);
 gaussVariance1 = 2*5^2;
 gaussVariance2 = 2*17.5^2;
 
 %% Initialize
 OrientationAnalysisObj = OrientationAnalysis();
-OrientationAnalysisObj.setImage(imagePath);
+OrientationAnalysisObj.setImageFromFile(imagePath);
 OrientationAnalysisObj.setGaussianFilter(gaussVariance1,gaussVariance2);
 
 %% Analyze
@@ -29,8 +30,8 @@ B = 0.8*pi;
 maxIt = 100;
 ripple = inf;
 transBandWidth = 0.1*pi;
-%fanFilter1 = getFanFilter(OrientationAnalysisObj.croppedImage,stopBand1,passBand1);
-[fanFilter1,i,MAXERR] = iterFirFan(thetaLow,thetaHigh,B,zeros(480),maxIt,ripple,transBandWidth);
+fanFilter1 = getFanFilter(size(OrientationAnalysisObj.croppedImage), thetaLow, thetaHigh, B);
+%[fanFilter1, i, MAXERR] = iterFirFan(thetaLow, thetaHigh, B, size(OrientationAnalysisObj.croppedImage), maxIt, ripple, transBandWidth);
 figure(4),
 surf(real(fanFilter1));
 title('output filter, spatial')

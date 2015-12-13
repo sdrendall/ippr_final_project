@@ -1,8 +1,11 @@
-function [windowedI, window] = hammingWindow2(I, flagType)
-%% flag type can be either 'periodic' or 'symmetric' 
-L = size(I);
-w = hamming(L(1), flagType); %for square image doesnt matter which image dim used
-[X,Y] = meshgrid(w, w);
-window = X.*Y;
-windowedI = I.*window;
+function window = hammingWindow2(window_size, hamming_flag)
+    %% flag type can be either 'periodic' or 'symmetric' 
+    if ~exist('hamming_flag', 'var')
+        hamming_flag = 'periodic';
+    end
+
+    hamming_x = hamming(window_size(2), hamming_flag);
+    hamming_y = hamming(window_size(1), hamming_flag);
+    [X,Y] = meshgrid(hamming_x, hamming_y);
+    window = X.*Y;
 end

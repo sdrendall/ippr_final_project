@@ -357,18 +357,19 @@ function handles = recompute_filter(handles)
     % Recomputes the fan filter used to filter the input image
     theta_low = str2double(get(handles.theta_low_text, 'String'));
     theta_high = str2double(get(handles.theta_high_text, 'String'));
+    max_radius = str2double(get(handles.r_high_text, 'String')) * pi;
 
     selected_mode = get(handles.filter_select_menu, 'Value');
     possible_modes = struct2cell(handles.filter_modes);
     switch possible_modes{selected_mode}
         case handles.filter_modes.ideal
-            handles.filter = getFanFilter(size(handles.image), theta_low, theta_high);
+            handles.filter = getFanFilter(size(handles.image), theta_low, theta_high, max_radius);
 
         case handles.filter_modes.iterative
             B = 0.8 * pi;
             ripple = inf;
             transition_width = (pi - B)/2;
-            max_iter = 1000;
+            max_iter = 100;
             handles.filter = iterFirFan(theta_low, theta_high, B, size(handles.image), max_iter, ripple, transition_width);
         end
 
