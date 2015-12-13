@@ -46,15 +46,3 @@ for i = 1:maxIt
     test = test + (diff.*w);
     
 end
-
-
-
-
-
-
-
-
-
-
-
-

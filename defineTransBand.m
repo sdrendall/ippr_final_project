@@ -17,15 +17,3 @@ end
 
 transBand = paddedFilter - fanFilter;
 end
-
-
-
-
-
-
-
-
-
-
-
-

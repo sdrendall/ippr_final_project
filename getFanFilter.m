@@ -35,4 +35,11 @@ function fanFilter = getFanFilter(hSize, thetaLow, thetaHigh)
             ((theta > 0) & (theta < thetaHigh))) = 1;
     end
 
+    if ~isempty(B)
+        regionXX = (axisxx > -B) & (axisxx < B);
+        regionYY = (axisyy > -B) & (axisyy < B);
+        fanFilterTemp = zeros(size(fanFilter));
+        fanFilterTemp(regionXX & regionYY) = fanFilter(regionXX & regionYY);
+        fanFilter = fanFilterTemp;
+    end
 end

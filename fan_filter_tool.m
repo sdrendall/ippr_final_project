@@ -358,8 +358,9 @@ function handles = recompute_filter(handles)
     theta_low = str2double(get(handles.theta_low_text, 'String'));
     theta_high = str2double(get(handles.theta_high_text, 'String'));
 
-    filter_mode = get(handles.filter_select_menu, 'String')
-    switch filter_mode
+    selected_mode = get(handles.filter_select_menu, 'Value');
+    possible_modes = struct2cell(handles.filter_modes);
+    switch possible_modes{selected_mode}
         case handles.filter_modes.ideal
             handles.filter = getFanFilter(size(handles.image), theta_low, theta_high);
 
