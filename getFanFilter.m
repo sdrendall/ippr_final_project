@@ -1,5 +1,5 @@
 function fanFilter = getFanFilter(hSize, thetaLow, thetaHigh, maxRadius)
-    %% fanFilter = getFanFilter(hSize, thetaLow, thetaHigh)
+    %% fanFilter = getFanFilter(hSize, thetaLow, thetaHigh, maxRadius)
     %
     % Generates the frequency spectrum of a fan filter that passes frequency components
     %  within the given range of phases

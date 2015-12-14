@@ -1,4 +1,4 @@
-function synthI = genSynthLines(theta,numLines,Isize)
+function [synthI,x,y] = genSynthLines(theta,numLines,Isize)
 %% synthI = genSynthLines(theta,numLines,Isize)
 % INPUTS:
 % theta - [1 x N] list of angles you wish to generate
@@ -6,9 +6,10 @@ function synthI = genSynthLines(theta,numLines,Isize)
 % Isize - [numRows, numColumns] size of synthetic image
 %
 % OUTPUTS:
-% synthI - [numRows x numColumns] binary image of straight lines
+% synthI  - [numRows x numColumns] binary image of straight lines
+% x and y - [numRows x numColumns] meshgrid output for plotting
 synthI = zeros(Isize(1),Isize(2));
-
+a
 % convert to radians
 theta = theta * pi/180;
 for i = 1:length(theta)
