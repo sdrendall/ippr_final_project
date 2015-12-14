@@ -1,4 +1,5 @@
 %% iterFirFan.m
+
 % This builds general fan-type filter for directional filtering in a 2D
 % image. The method for generating this filter is taken from Soo-Chang
 % Pei's paper 'Two-dimensional general fan-type FIR digital filter design',

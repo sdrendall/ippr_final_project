@@ -62,7 +62,10 @@ function fan_filter_tool_OpeningFcn(hObject, eventdata, handles, varargin)
     % Create Fan Filter Modes
     handles.filter_modes = struct( ...
         'ideal', 'Ideal Fan', ...
-        'iterative', 'Iterative Fan' ...
+        'iterative', 'Iterative Fan', ...
+        'cir_hanning', 'Circular Hanning', ...
+        'rect_hanning', 'Rectangular Hanning', ...
+        'gauss', 'Gaussian Window' ...
     );
     
     set(handles.filter_select_menu, 'String', struct2cell(handles.filter_modes));
@@ -358,6 +361,7 @@ function handles = recompute_filter(handles)
     theta_low = str2double(get(handles.theta_low_text, 'String'));
     theta_high = str2double(get(handles.theta_high_text, 'String'));
     max_radius = str2double(get(handles.r_high_text, 'String')) * pi;
+    sigma = str2double(get(handles.r_low_text, 'String'));
 
     selected_mode = get(handles.filter_select_menu, 'Value');
     possible_modes = struct2cell(handles.filter_modes);
@@ -371,6 +375,19 @@ function handles = recompute_filter(handles)
             transition_width = (pi - B)/2;
             max_iter = 100;
             handles.filter = iterFirFan(theta_low, theta_high, B, size(handles.image), max_iter, ripple, transition_width);
+
+        case handles.filter_modes.cir_hanning
+            H = getFanFilter(size(handles.image), theta_low, theta_high, max_radius);
+            handles.filter = apply_window(H, 'hanning', 'circular');
+        
+        case handles.filter_modes.rect_hanning
+            H = getFanFilter(size(handles.image), theta_low, theta_high, max_radius);
+            handles.filter = apply_window(H, 'hanning', 'separable');
+
+        case handles.filter_modes.gauss
+            H = getFanFilter(size(handles.image), theta_low, theta_high, max_radius);
+            handles.filter = imfilter(H, fspecial('gaussian', size(H), sigma), 'conv');
+
         end
 
 
@@ -404,7 +421,7 @@ function refresh_filter_window(handles)
     selected_button = get(handles.filter_display_button_group, 'SelectedObject');
     switch get(selected_button, 'Tag')
         case 'show_filtered_image_radio'
-            imshow(handles.filtered_image);
+            imshow(mat2gray(handles.filtered_image));
         case 'show_filter_kernel_radio'
             imshow(real(fftshift(fft2(handles.filter))));
             colormap('parula')
@@ -412,3 +429,12 @@ function refresh_filter_window(handles)
             imshow(mat2gray(handles.filter));
             colormap('parula')
     end
+
+
+function H = apply_window(H, window_type, scale_method)
+    h = ifft2(ifftshift(H));
+    w = window2(size(h), window_type, scale_method);
+
+    h = w .* h;
+    H = fftshift(fft2(h));
+    H = real(H);

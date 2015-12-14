@@ -13,8 +13,8 @@ function fanFilter = getFanFilter(hSize, thetaLow, thetaHigh, maxRadius)
     numPixelRow = hSize(1);
     numPixelColumn = hSize(2);
     axisX = -floor(numPixelColumn/2):(ceil(numPixelColumn/2) - 1);
-    axisY = -floor(numPixelRow/2):ceil((numPixelRow/2) - 1);
-    [axisxx, axisyy] =  meshgrid(axisX, -axisY);
+    axisY = -(-floor(numPixelRow/2):ceil((numPixelRow/2) - 1));
+    [axisxx, axisyy] =  meshgrid(axisX, axisY);
 
     % shift angle by pi/2 to align correctly with FFT
     thetaLow = mod(thetaLow + 90, 180);
@@ -28,10 +28,10 @@ function fanFilter = getFanFilter(hSize, thetaLow, thetaHigh, maxRadius)
     % create fanfilter mask
     fanFilter = zeros(numPixelRow, numPixelColumn);
     if thetaLow < thetaHigh
-        fanFilter((theta > thetaLow) & (theta < thetaHigh)) = 1;
+        fanFilter((theta >= thetaLow) & (theta < thetaHigh)) = 1;
     elseif thetaHigh < thetaLow
-        fanFilter(((theta > thetaLow) & (theta < 180)) |...
-            ((theta > 0) & (theta < thetaHigh))) = 1;
+        fanFilter(((theta > thetaLow) & (theta <= 180)) |...
+            ((theta >= 0) & (theta < thetaHigh))) = 1;
     end
 
     if (exist('maxRadius', 'var') && ~isempty(maxRadius))
