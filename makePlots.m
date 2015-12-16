@@ -1,6 +1,23 @@
 %% makePlots.m
 clc; clear; close all;
 
+%% Convert original .tif images to .png for latex document
+filePath = 'C:\Users\James\Dropbox\NortheasternUniversity\Senior\EECE 5626 - Image Processing and Pattern Recognition\TermProject\Final Report\Images\';
+image = imread([filePath 'human1.tif']);
+imwrite(image,[filePath 'human1.png']);
+
+image = imread([filePath 'Cornea-F-004_004_52_5um - Edited.tif']);
+imwrite(image,[filePath 'Cornea-F-004_004_52_5um - Edited.png']);
+
+image = imread([filePath 'Cornea-F-004_037_-46_5um - Edited.tif']);
+imwrite(image,[filePath 'Cornea-F-004_037_-46_5um - Edited.png']);
+
+image = imread([filePath 'Lines_2_45degrees.tif']);
+imwrite(image,[filePath 'Lines_2_45degrees.png']);
+
+image = imread([filePath 'Lines_15_45degrees.tif']);
+imwrite(image,[filePath 'Lines_15_45degrees.png']);
+
 %% Gaussian Filter
 filePath = 'C:\Users\slimj_000\Dropbox\NortheasternUniversity\Senior\EECE 5626 - Image Processing and Pattern Recognition\TermProject\Images';
 load('gaussFilter_45_90_2_0.8.mat');
