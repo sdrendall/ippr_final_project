@@ -7,7 +7,8 @@ scannerDimensions = [4490 5680]; %microns
 
 %imagePath = 'C:\Users\csl\Dropbox\OSL\Images\NEBEC\human1.tif';
 %imagePath = 'C:\Users\csl\Dropbox\OSL\Images\Ruberti\test2.tif';
-imagePath = 'C:\Users\csl\Dropbox\OSL\NEBEC\Images\human1.tif';
+%imagePath = 'C:\Users\csl\Dropbox\OSL\NEBEC\Images\human1.tif';
+imagePath = 'C:\Users\slimj_000\Dropbox\NortheasternUniversity\Senior\EECE 5626 - Image Processing and Pattern Recognition\TermProject\Images\human1.tif';
 
 % For Cornea
 % gaussVariance1 = 2*17.5^2;
@@ -21,7 +22,7 @@ gaussVariance2 = 2*17.5^2;
 OrientationAnalysisObj = OrientationAnalysis('objectiveMag',objectiveMag,...
                                              'scannerDimensions',scannerDimensions);
                                          
-OrientationAnalysisObj.setImage(imagePath);
+OrientationAnalysisObj.setImageFromFile(imagePath);
 OrientationAnalysisObj.setGaussianFilter(gaussVariance1,gaussVariance2);
 
 %% Analyze
@@ -42,5 +43,6 @@ OrientationAnalysisObj.Display('imageType','imageRadon',...
                                'axisType','tight',...
                                'colormap','hot','FontSize',20);
 OrientationAnalysisObj.Display('imageType','radonPeaks',...
-                               'title','Probability Density Function',...
-                               'axisType','tight','FontSize',20);set(gca,'Color','none');
+                               'title','',...
+                               'axisType','tight','FontSize',20);
+                                    set(gca,'Color','none');
