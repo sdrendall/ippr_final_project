@@ -62,9 +62,7 @@ function fan_filter_tool_OpeningFcn(hObject, eventdata, handles, varargin)
     % Create Fan Filter Modes
     handles.filter_modes = struct( ...
         'ideal', 'Ideal Fan', ...
-        'iterative', 'Iterative Fan', ...
         'cir_hanning', 'Circular Hanning', ...
-        'rect_hanning', 'Rectangular Hanning', ...
         'gauss', 'Gaussian Window' ...
     );
     
@@ -109,7 +107,7 @@ function save_filtered_image_button_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
     [filename, directory] = uiputfile(fullfile(pwd, '*.*'), 'Save Filtered Image');
     save_path = fullfile(directory, filename);
-    imwrite(handles.filtered_image, save_path);
+    imwrite(mat2gray(handles.filtered_image), save_path);
 
 % --- Executes on button press in save_filter_button.
 function save_filter_button_Callback(hObject, eventdata, handles)
@@ -321,7 +319,7 @@ function handles = set_defaults(handles)
     % Sets the default values for parameters used for filtering
     set(handles.gauss_var1_text, 'String', num2str(2*5^2));
     set(handles.gauss_var2_text, 'String', num2str(2*17.5^2));
-    set(handles.r_low_text, 'String', num2str(0));
+    set(handles.r_low_text, 'String', num2str(1));
     set(handles.r_high_text, 'String', num2str(1));
     set(handles.theta_low_text, 'String', num2str(45));
     set(handles.theta_high_text, 'String', num2str(90));
@@ -352,6 +350,7 @@ function handles = recompute_orientation(handles)
     handles.orientation_analyzer.setImage(handles.image);
     handles.orientation_analyzer.setGaussianFilter(gauss_var1, gauss_var2);
     handles.orientation_vector = handles.orientation_analyzer.computeRadonPeaks();
+    handles.orientation_vector = mat2gray(handles.orientation_vector);
 
 
 function handles = recompute_filter(handles)
@@ -369,21 +368,10 @@ function handles = recompute_filter(handles)
         case handles.filter_modes.ideal
             handles.filter = getFanFilter(size(handles.image), theta_low, theta_high, max_radius);
 
-        case handles.filter_modes.iterative
-            B = 0.8 * pi;
-            ripple = inf;
-            transition_width = (pi - B)/2;
-            max_iter = 100;
-            handles.filter = iterFirFan(theta_low, theta_high, B, size(handles.image), max_iter, ripple, transition_width);
-
         case handles.filter_modes.cir_hanning
             H = getFanFilter(size(handles.image), theta_low, theta_high, max_radius);
             handles.filter = apply_window(H, 'hanning', 'circular');
         
-        case handles.filter_modes.rect_hanning
-            H = getFanFilter(size(handles.image), theta_low, theta_high, max_radius);
-            handles.filter = apply_window(H, 'hanning', 'separable');
-
         case handles.filter_modes.gauss
             H = getFanFilter(size(handles.image), theta_low, theta_high, max_radius);
             handles.filter = imfilter(H, fspecial('gaussian', size(H), sigma), 'conv');

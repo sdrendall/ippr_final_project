@@ -18,7 +18,7 @@ w = hammingWindow2(hSize);
 transitionBand = defineTransBand(desired_filter, transBandWidth);
 
 % take iFFT2 and apply hamming window
-test = ifft2(desired_filter);
+test = ifft2(ifftshift(desired_filter));
 test = test.*w;
 
 %% Step 2 - Test Performance
@@ -45,3 +45,5 @@ for i = 1:maxIt
     test = test + (diff.*w);
     
 end
+
+h = real(fftshift(fft2(h)));
